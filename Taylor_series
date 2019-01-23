@@ -46,3 +46,28 @@ plt.figure(0)
 plt.plot(time,C, label = 'number of taylor terms is: ' +str(taylor_terms))
 plt.figure(2)
 plt.scatter(time,C, label = 'number of taylor terms is: ' +str(taylor_terms))
+from openpyxl import load_workbook
+import pandas as pd
+
+taylor_script = pd.DataFrame(columns = ['time','Growth']) # creating a data frame in pandas to copy it to excel
+taylor_script['time'] = time
+taylor_script['Growth'] = C
+
+import os
+print(os.getcwd())
+
+path = 'New Microsoft Excel Worksheet'   # create a new excel file in the directory shown
+#save_data = 'Y'
+input('Save data(Y/N): ').upper()  # to ask for an input if they want to save or no
+if save_data == 'Y':
+    path_to_excel = path +'.xlsx'
+    book = load_workbook(path_to_excel)
+    writer = pd.ExcelWriter(path_to_excel, engine = 'openpyxl')
+    writer.book = book
+    if 'taylor_script' in book.sheetnames:
+        book.remove_sheet(book.get_sheet_by_name('taylor_script'))
+    taylor_script.to_excel(writer,sheet_name = 'taylor_script', index=False)
+    writer.save()
+    writer.close()    	
+else:
+    pass
